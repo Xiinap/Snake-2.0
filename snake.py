@@ -152,4 +152,4 @@ while True:
         time.tick(4+speed)
         pygame.display.update()  # window update
         
-a = input('')
+a = input('') # for realise
