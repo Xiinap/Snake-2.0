@@ -47,6 +47,12 @@ class Snake:
                 self.x = x
                 self.y = y
 
+        def is_inside(self):
+                return 0 <= self.x < COUNT_BLOCK and 0 <= self.y < COUNT_BLOCK
+
+        def __eq__(self, other):
+                return isinstance(other, Snake) and self.x == other.x and self.y == other.y
+
 
 def draw_block(color, row, col):
         pygame.draw.rect(screen, color, [SIZE_BLOCK + col * SIZE_BLOCK + MARGIN * (col + 1),
@@ -90,8 +96,7 @@ while True:
                                 buf_col = -1
 
                         elif event.key == pygame.K_ESCAPE:  #cheat code
-                                buf_row = 0
-                                buf_col = 0
+                                speed += 1
 
                         elif event.key == pygame.K_q:  #exit
                                 sys.exit()
@@ -117,6 +122,9 @@ while True:
 
         head = snake[-1] #make snake head
 
+        if not head.is_inside():
+                break
+
         draw_block(RED, apple.x, apple.y)
 
         for block in snake:
@@ -133,8 +141,13 @@ while True:
         d_col = buf_col
 
         new_head = Snake(head.x + d_row, head.y + d_col)
+
+        if new_head in snake:
+                sys.exit()
+                break
+
         snake.append(new_head)
         snake.pop(0)
 
-        time.tick(5)
+        time.tick(4+speed)
         pygame.display.update()  # window update
